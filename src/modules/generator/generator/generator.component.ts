@@ -18,7 +18,7 @@ export class GeneratorComponent {
     startWith("Space"),
     filter(x => x === "Space"),
     withLatestFrom(this.palleteSize),
-    map(([_, size]) => this.colorsService.generateEvenWheel(size))
+    map(([_, size]) => this.colorsService.generateOppositeWheel(size))
   )
 
   constructor(
