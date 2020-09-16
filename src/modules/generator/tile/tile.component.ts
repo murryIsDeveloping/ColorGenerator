@@ -7,7 +7,7 @@ import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TileComponent implements OnInit {
-  @Input('color') color: string;
+  @Input('color') color: [number, number, number];
 
   constructor() { }
 

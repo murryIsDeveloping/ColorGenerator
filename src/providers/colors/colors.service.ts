@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { splitEvery, map } from 'ramda'
 
-export type colorRgb = {r: number, g: number, b: number};
+export type colorRgb = [number, number, number]
+
 
 @Injectable({
   providedIn: 'root'
@@ -9,17 +9,15 @@ export type colorRgb = {r: number, g: number, b: number};
 export class ColorsService {
   constructor() { }
 
-  public hexToRGB(hex: string): colorRgb {
-    const [r, g, b] = splitEvery(2, hex.substring(1)).map(v => parseInt(v, 16))
-    return {r, g, b}
+  public randomColor(): colorRgb {
+    const color = () => Math.floor(Math.random() * 256)
+    return [color(), color(), color()]
   }
 
-  private compToHex(c){
-    var hex = c.toString(16);
-    return hex.length == 1 ? "0" + hex : hex;
-  }
-
-  public RGBToHex(RGB: colorRgb): string {
-    return "#" + this.compToHex(RGB.r) + this.compToHex(RGB.g) + this.compToHex(RGB.b);
+  public generateEvenWheel(size: number): colorRgb[] {
+    let primary = this.randomColor();
+    let spacing = Math.floor(256/size)
+    let generate = (num, i) => (num + (spacing*i)) % 256
+    return Array(size).fill(0).map((_,i) => [generate(primary[0], i), generate(primary[1], i), generate(primary[2], i)])
   }
 }

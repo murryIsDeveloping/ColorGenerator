@@ -1,7 +1,7 @@
-<div class="tile" [ngStyle]="{
+<section class="tile" [ngStyle]="{
   'backgroundColor': (color | rgbToHex),
-  'color': (color | rgbIsDark) ? '#fff' : '#000'
+  'color': (color | rgbIsDark) ? '#ffffff' : '#000000'
 }">
-  {{ color }}
-  {{ color | rgbToHex }}
-</div>
+  <h3>RGB: {{ color }}</h3>
+  <h3>Hex: {{ color | rgbToHex }}</h3>
+</section>

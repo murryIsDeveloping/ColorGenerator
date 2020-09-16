@@ -5,10 +5,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class RgbToHexPipe implements PipeTransform {
 
-  transform(RGB: [number,number, number], ...args: unknown[]): unknown {
-    if(Array.isArray(RGB)){
-      return "#" + this.compToHex(RGB[0]) + this.compToHex(RGB[1]) + this.compToHex(RGB[2]);
-    }
+  transform(RGB: [number,number, number], ...args: unknown[]): string {
+      let s =  "#" + this.compToHex(RGB[0]) + this.compToHex(RGB[1]) + this.compToHex(RGB[2]);
+      return s.toUpperCase()
   }
 
   private compToHex(c){
