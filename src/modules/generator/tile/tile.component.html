@@ -1,0 +1,7 @@
+<div class="tile" [ngStyle]="{
+  'backgroundColor': (color | rgbToHex),
+  'color': (color | rgbIsDark) ? '#fff' : '#000'
+}">
+  {{ color }}
+  {{ color | rgbToHex }}
+</div>
