@@ -5,7 +5,7 @@ import {
 } from './../../../providers/colors/colors.service';
 import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { filter, map, startWith, withLatestFrom } from 'rxjs/operators';
+import { filter, map, startWith, tap, withLatestFrom } from 'rxjs/operators';
 
 @Component({
   selector: 'app-generator',
@@ -18,7 +18,7 @@ export class GeneratorComponent {
     startWith("Space"),
     filter(x => x === "Space"),
     withLatestFrom(this.palleteSize),
-    map(([_, size]) => this.colorsService.generateOppositeWheel(size))
+    map(([_, size]) => this.colorsService.generateEvenWheel(size)),
   )
 
   constructor(

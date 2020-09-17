@@ -6,7 +6,7 @@ import { TileComponent } from './tile/tile.component';
 import { PieComponent } from './pie/pie.component';
 import { PaletteComponent } from './palette/palette.component';
 import { RgbToHexPipe } from './pipes/rgb-to-hex.pipe';
-import { RgbIsDarkPipe } from './pipes/rgb-is-dark.pipe';
+import { ContrastTextColorPipe } from './pipes/contrast-text-color.pipe';
 
 const routes: Routes = [
   {
@@ -16,7 +16,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [GeneratorComponent, TileComponent, PieComponent, PaletteComponent, RgbToHexPipe, RgbIsDarkPipe],
+  declarations: [GeneratorComponent, TileComponent, PieComponent, PaletteComponent, RgbToHexPipe , ContrastTextColorPipe],
   imports: [
     CommonModule,
     RouterModule.forChild(routes)

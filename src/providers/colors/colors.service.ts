@@ -1,67 +1,162 @@
 import { Injectable } from '@angular/core';
 import { take } from 'ramda';
 
-export type colorRgb = [number, number, number]
-
+export type colorRgb = [number, number, number];
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ColorsService {
-  spacing = 25;
+  spacing = 16;
 
-  constructor() { }
+  constructor() {}
 
   public randomColor(): colorRgb {
-    const color = () => Math.floor(Math.random() * 256)
-    return [color(), color(), color()]
+    const color = () => Math.floor(Math.random() * 256);
+    return [color(), color(), color()];
   }
 
-  public generateEvenWheel(size: number, primary = null): colorRgb[] {
-    if(!primary){
-      primary = this.randomColor();
-    }
+  public RGBtoHSV(rgb: colorRgb): { h: number; s: number; v: number } {
+    const [r, g, b] = rgb;
+    let rabs, gabs, babs, rr, gg, bb, h, s, v, diff, diffc, percentRoundFn;
+    rabs = r / 255;
+    gabs = g / 255;
+    babs = b / 255;
+    (v = Math.max(rabs, gabs, babs)), (diff = v - Math.min(rabs, gabs, babs));
+    diffc = (c) => (v - c) / 6 / diff + 1 / 2;
+    percentRoundFn = (num) => Math.round(num * 100) / 100;
+    if (diff == 0) {
+      h = s = 0;
+    } else {
+      s = diff / v;
+      rr = diffc(rabs);
+      gg = diffc(gabs);
+      bb = diffc(babs);
 
-    let spacing = Math.floor(256/size)
-    let generate = (num, i) => (num + (spacing*i)) % 256
-    return Array(size).fill(0).map((_,i) => [generate(primary[0], i), generate(primary[1], i), generate(primary[2], i)])
+      if (rabs === v) {
+        h = bb - gg;
+      } else if (gabs === v) {
+        h = 1 / 3 + rr - bb;
+      } else if (babs === v) {
+        h = 2 / 3 + gg - rr;
+      }
+      if (h < 0) {
+        h += 1;
+      } else if (h > 1) {
+        h -= 1;
+      }
+    }
+    return {
+      h: Math.round(h * 360),
+      s: percentRoundFn(s * 100),
+      v: percentRoundFn(v * 100),
+    };
   }
 
-  public generateShadesWheel(size: number, primary = null): colorRgb[] {
-    if(!primary){
-      primary = this.randomColor();
-    }
-    let generate = (num, i) => {
-      let value = (num + (this.spacing*i))%256
-      return value <= 0 ? 256+value : value
-    }
-    let arr: colorRgb[] = [primary]
-    let i = 1;
+  public HSVtoRGB(hsv: {h: number, s: number, v: number}): colorRgb {
+    let h = hsv.h/360
+    let s = hsv.s/100
+    let v = hsv.v/100
 
-    while(arr.length < size){
-      arr.push(
-        [generate(primary[0], i), generate(primary[1], i), generate(primary[2], i)],
-        [generate(primary[0], -i), generate(primary[1], -i), generate(primary[2], -i)]
-      )
-      i++;
+    let r, g, b, i, f, p, q, t;
+    i = Math.floor(h * 6);
+    f = h * 6 - i;
+    p = v * (1 - s);
+    q = v * (1 - f * s);
+    t = v * (1 - (1 - f) * s);
+    switch (i % 6) {
+      case 0:
+        (r = v), (g = t), (b = p);
+        break;
+      case 1:
+        (r = q), (g = v), (b = p);
+        break;
+      case 2:
+        (r = p), (g = v), (b = t);
+        break;
+      case 3:
+        (r = p), (g = q), (b = v);
+        break;
+      case 4:
+        (r = t), (g = p), (b = v);
+        break;
+      case 5:
+        (r = v), (g = p), (b = q);
+        break;
     }
-    return take(size, arr);
+    return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
   }
+
 
   private generateOpposite(color: colorRgb): colorRgb {
-    let half = 256/2
-    let opp = value => (value + half)%256
-    return [opp(color[0]), opp(color[1]), opp(color[2])]
+    let half = 256 / 2;
+    let opp = (value) => (value + half) % 256;
+    return [opp(color[0]), opp(color[1]), opp(color[2])];
   }
 
   public generateOppositeWheel(size: number, primary = null): colorRgb[] {
-    if(!primary){
+    if (!primary) {
       primary = this.randomColor();
     }
 
-    let opp = this.generateOpposite(primary)
-    let shades = this.generateShadesWheel(size, opp)
-    shades[0] = primary
+    let opp = this.generateOpposite(primary);
+    let shades = this.generateShadesWheel(size, opp);
+    shades[0] = primary;
     return shades;
   }
+
+    // generate using hsv
+    public generateEvenWheel(size: number, primary = null): colorRgb[] {
+      if (!primary) {
+        primary = this.randomColor();
+      }
+
+      let hsv = this.RGBtoHSV(primary);
+      let spacing = Math.floor(360/size);
+
+      let generate = (i) => {
+        let h = (hsv.h + spacing*i)%360
+        return this.HSVtoRGB({
+          ...hsv,
+          h
+        })
+      }
+
+      return Array(size)
+        .fill(0)
+        .map((_, i) => generate(i));
+    }
+
+    public generateShadesWheel(size: number, primary = null): colorRgb[] {
+      if (!primary) {
+        primary = this.randomColor();
+      }
+
+      let hsv = this.RGBtoHSV(primary);
+      let spacing = 100/(size+1);
+
+      let generate = (i) => {
+        let v = spacing + spacing*i
+        let color = { ...hsv, v };
+        return this.HSVtoRGB(color)
+      }
+
+      return Array(size)
+        .fill(0)
+        .map((_, i) => {
+          const value = generate(i);
+          return value
+        });
+    }
+
+    public generateOppositeWheelHSV(size: number, primary = null): colorRgb[] {
+      if (!primary) {
+        primary = this.randomColor();
+      }
+
+      let opp = this.generateOpposite(primary);
+      let shades = this.generateShadesWheel(size, opp);
+      shades[0] = primary;
+      return shades;
+    }
 }

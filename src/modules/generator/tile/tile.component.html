@@ -1,6 +1,6 @@
 <section class="tile" [ngStyle]="{
-  'backgroundColor': (color | rgbToHex),
-  'color': (color | rgbIsDark) ? '#ffffff' : '#000000'
+  'backgroundColor': color | rgbToHex,
+  'color': color | contrastTextColor
 }">
   <h3>RGB: {{ color }}</h3>
   <h3>Hex: {{ color | rgbToHex }}</h3>
