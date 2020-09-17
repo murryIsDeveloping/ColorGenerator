@@ -1,4 +1,7 @@
-
-<div class="tiles">
-  <app-tile *ngFor="let color of pallete | async" [color]="color" ></app-tile>
+<div class="palette">
+  <app-palette [palette]="palette | async"></app-palette>
+  <div class="palette__instructions">
+    <h3>Click the 'space bar' to generate different palettes {{ palleteSize }}</h3>
+  </div>
+  <app-number-dial [ngModel]="palleteSize" (onChange)="change($event)"></app-number-dial>
 </div>

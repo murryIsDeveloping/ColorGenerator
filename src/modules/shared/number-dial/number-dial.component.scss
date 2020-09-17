@@ -1,0 +1,13 @@
+.number-dial {
+  display: flex;
+  border-radius: 50%;
+  height: 100px;
+  width: 100px;
+  background-color: #ffffff;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.number-toggle {
+  cursor: pointer;
+}

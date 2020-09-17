@@ -13,17 +13,16 @@ import { filter, map, startWith, tap, withLatestFrom } from 'rxjs/operators';
   styleUrls: ['./generator.component.scss'],
 })
 export class GeneratorComponent {
-  palleteSize: BehaviorSubject<number> = new BehaviorSubject(5);
-  pallete: Observable<colorRgb[]> = this.EventService.keyUp.pipe(
+  palleteSize: number = 7;
+  palette: Observable<colorRgb[]> = this.EventService.keyUp.pipe(
     startWith("Space"),
     filter(x => x === "Space"),
-    withLatestFrom(this.palleteSize),
-    map(([_, size]) => {
+    map(([_]) => {
       let val = Math.random();
-      return val > 0.75 ? this.colorsService.generateAdjacentWheel(size):
-      val > 0.50 ? this.colorsService.generateTetradWheel(size) :
-      val > 0.25 ? this.colorsService.generateEvenWheel(size) :
-      this.colorsService.generateShadesWheel(size)
+      return val > 0.75 ? this.colorsService.generateAdjacentWheel(this.palleteSize):
+      val > 0.50 ? this.colorsService.generateTetradWheel(this.palleteSize) :
+      val > 0.25 ? this.colorsService.generateEvenWheel(this.palleteSize) :
+      this.colorsService.generateShadesWheel(this.palleteSize)
     }),
   )
 
@@ -32,4 +31,9 @@ export class GeneratorComponent {
     private EventService: EventService
   ) {}
 
+
+  change($event){
+    console.log($event)
+    this.palleteSize = $event
+  }
 }
