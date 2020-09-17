@@ -12,6 +12,9 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   }]
 })
 export class NumberDialComponent implements ControlValueAccessor {
+  @Input() max: number = 1000
+  @Input() min: number = 0
+
   val;
   disabled = false;
   constructor() { }
@@ -29,11 +32,10 @@ export class NumberDialComponent implements ControlValueAccessor {
 
   updateValue(val: number) {
     if(val < 0) {
-      this.value = this.val > 1 ? this.val-1 : this.val
+      this.writeValue(this.val > this.min ? this.val-1 : this.val)
     } else {
-      this.value = this.val < 15 ? this.val+1 : this.val
+      this.writeValue(this.val < this.max ? this.val+1 : this.val)
     }
-    console.log({value: this.val})
   }
 
   writeValue(value: number): void {

@@ -3,5 +3,5 @@
   <div class="palette__instructions">
     <h3>Click the 'space bar' to generate different palettes {{ palleteSize }}</h3>
   </div>
-  <app-number-dial [ngModel]="palleteSize" (onChange)="change($event)"></app-number-dial>
+  <app-number-dial [(ngModel)]="palleteSize" [max]="8" [min]="1"></app-number-dial>
 </div>
