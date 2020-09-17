@@ -1,4 +1,4 @@
-import { colorRgb } from './../../../providers/colors/colors.service';
+import { colorRgb } from '@util/color-transformations';
 import { Component, Input } from '@angular/core';
 
 @Component({

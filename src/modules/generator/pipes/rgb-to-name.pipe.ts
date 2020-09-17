@@ -1,6 +1,5 @@
-import { colorRgb } from './../../../providers/colors/colors.service';
 import { Pipe, PipeTransform } from '@angular/core';
-import { RGBtoHex } from './../../../util/color-transformations';
+import { RGBtoHex, colorRgb } from '@util/color-transformations';
 import { name } from 'ntc';
 
 @Pipe({

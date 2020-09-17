@@ -1,4 +1,5 @@
-import { colorRgb } from './../providers/colors/colors.service';
+import { take } from 'ramda';
+export type colorRgb = [number, number, number];
 
 export function RGBtoHSV(rgb: colorRgb): { h: number; s: number; v: number } {
   const [r, g, b] = rgb;
@@ -80,4 +81,90 @@ export function RGBtoHex(colorRgb: colorRgb){
   }
   let s =  "#" + compToHex(colorRgb[0]) + compToHex(colorRgb[1]) + compToHex(colorRgb[2]);
   return s.toUpperCase()
+}
+
+export function randomColor(): colorRgb {
+  const color = () => Math.floor(Math.random() * 256);
+  return [color(), color(), color()];
+}
+
+export function generateEvenWheel(size: number, primary = null): colorRgb[] {
+  let hsv = primary ? RGBtoHSV(primary) : RGBtoHSV(randomColor());
+  let spacing = Math.floor(360 / size);
+
+  let generate = (i) => {
+    let h = (hsv.h + spacing * i) % 360;
+    return HSVtoRGB({
+      ...hsv,
+      h,
+    });
+  };
+
+  return Array(size)
+    .fill(0)
+    .map((_, i) => generate(i));
+}
+
+export function generateShadesWheel(
+  size: number,
+  primary: colorRgb = null
+): colorRgb[] {
+  let hsv = primary ? RGBtoHSV(primary) : RGBtoHSV(randomColor());
+  let spacing = 100 / (size + 1);
+
+  let generate = (i) => {
+    let v = spacing + spacing * i;
+    let color = { ...hsv, v };
+    return HSVtoRGB(color);
+  };
+
+  return Array(size)
+    .fill(0)
+    .map((_, i) => {
+      const value = generate(i);
+      return value;
+    });
+}
+
+export function generateTetradWheel(
+  size: number,
+  primary: colorRgb = null,
+  setDeg = null
+): colorRgb[] {
+  let hsv = primary ? RGBtoHSV(primary) : RGBtoHSV(randomColor());
+  let deg = setDeg || Math.random() * 70 + 5;
+  let arr = [];
+  let arrOp = [];
+  let i = 0;
+  while (arr.length + arrOp.length < size) {
+    let a = HSVtoRGB({ ...hsv, h: hsv.h + deg * i });
+    let b = HSVtoRGB({ ...hsv, h: hsv.h + deg * i + 180 });
+    arr.push(a);
+    arrOp.push(b);
+    i++;
+  }
+
+  return take(size, [...arr, ...arrOp]);
+}
+
+export function generateAdjacentWheel(
+  size: number,
+  primary: colorRgb = null,
+  setDeg = null
+): colorRgb[] {
+  let hsv = primary ? RGBtoHSV(primary) : RGBtoHSV(randomColor());
+  let deg = setDeg || Math.random() * 70 + 5;
+
+  let generate = (i) => {
+    let h = deg * i;
+    let color = { ...hsv, h: hsv.h + h };
+    return HSVtoRGB(color);
+  };
+
+  return Array(size)
+    .fill(0)
+    .map((_, i) => {
+      const value = generate(i);
+      return value;
+    });
 }
