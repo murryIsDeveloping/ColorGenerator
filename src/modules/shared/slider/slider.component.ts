@@ -14,7 +14,7 @@ import { throttleTime, map, filter, pluck, tap, scan, startWith, withLatestFrom 
     multi: true
   }]
 })
-export class SliderComponent implements OnInit, AfterViewInit, ControlValueAccessor {
+export class SliderComponent implements ControlValueAccessor {
   @Input('min') min: number;
   @Input('max') max: number;
 
@@ -28,6 +28,7 @@ export class SliderComponent implements OnInit, AfterViewInit, ControlValueAcces
 
   height: number;
   offset: number;
+  init = false;
 
   val: number;
 
@@ -38,18 +39,13 @@ export class SliderComponent implements OnInit, AfterViewInit, ControlValueAcces
     @Inject(DOCUMENT) private document: Document
   ) { }
 
-  ngAfterViewInit(){
-    this.initValues();
-  }
-
-  ngOnInit(): void { }
-
   initValues(){
+    this.init = true;
     this.height = this.track.nativeElement.offsetHeight;
     let maxHeight = this.height-15;
     let dif = this.max - this.min;
-    let stepHeight = maxHeight/(dif+1);
-    let startVal = this.val ? (stepHeight*(this.val+1))+(stepHeight/2) : maxHeight/2
+    let stepHeight = maxHeight/dif;
+    let startVal = (stepHeight*this.val)-(stepHeight/2)
 
     const hammerPan = new Hammer(this.tracker.nativeElement)
     hammerPan.get('pan').set({ direction: Hammer.DIRECTION_VERTICAL });
@@ -99,8 +95,14 @@ export class SliderComponent implements OnInit, AfterViewInit, ControlValueAcces
   }
 
   writeValue(value: number): void {
-    this.val = value > this.max ? this.max : value < this.min ? this.min : value;
-    this.onChange(this.val)
+    if(value !== null){
+      this.val = value > this.max ? this.max : value < this.min ? this.min : value;
+      this.onChange(this.val)
+
+      if(!this.init){
+        this.initValues()
+      }
+    }
   }
 
   setDisabledState?(isDisabled: boolean): void {
