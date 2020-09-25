@@ -9,9 +9,14 @@ import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core
 export class TileComponent implements OnInit {
   @Input('color') color: [number, number, number];
 
+  active = false;
   constructor() { }
 
   ngOnInit(): void {
   }
 
+  toggleActive(){
+    console.log('active', this.active)
+    this.active = !this.active;
+  }
 }

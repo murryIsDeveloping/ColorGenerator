@@ -113,17 +113,15 @@ export function generateShadesWheel(
   let spacing = 100 / (size + 1);
 
   let generate = (i) => {
-    let v = spacing + spacing * i;
-    let color = { ...hsv, v };
-    return HSVtoRGB(color);
+    let v = (hsv.v + spacing * i) % 100;
+    return { ...hsv, v };
   };
 
   return Array(size)
     .fill(0)
-    .map((_, i) => {
-      const value = generate(i);
-      return value;
-    });
+    .map((_, i) => generate(i))
+    .sort((a,b) => a.v - b.v)
+    .map(HSVtoRGB)
 }
 
 export function generateTetradWheel(

@@ -1,8 +1,10 @@
-<section class="tile" [ngStyle]="{
-  'backgroundColor': color | rgbToHex,
-  'color': color | contrastTextColor
-}">
-  <h3>RGB: {{ color }}</h3>
-  <h3>Hex: {{ color | rgbToHex }}</h3>
-  <h3>{{ color | rgbToName }}</h3>
+<section class="tile" [ngClass]="{'active' : active}">
+  <div class="tile-color" *ngFor="let c of color | shades : active" [ngStyle]="{
+      'backgroundColor': c | rgbToHex,
+      'color': c | contrastTextColor
+    }" (click)="toggleActive()">
+      <h3>RGB: {{ c }}</h3>
+      <h3>Hex: {{ c | rgbToHex }}</h3>
+      <h3>{{ c | rgbToName }}</h3>
+  </div>
 </section>
