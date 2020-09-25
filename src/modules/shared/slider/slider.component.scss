@@ -1,0 +1,38 @@
+:host {
+  position: absolute;
+  height: 100%;
+}
+
+.track {
+  cursor: pointer;
+  margin: 0 10px;
+  border-radius: 5px;
+  height: 100%;
+  box-sizing: border-box;
+  width: 5px;
+  background-color: rgba(255, 255, 255, 0.3);
+  opacity: 0.2;
+  transition: opacity ease 0.3s;
+
+  &.show {
+    opacity: 1;
+  }
+
+  &.active {
+    opacity: 1;
+    .tracker {
+      cursor: grabbing;
+    }
+  }
+}
+
+.tracker {
+  cursor: grab;
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  left: 5px;
+  top: 15px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.8);
+}

@@ -1,10 +1,11 @@
 <section class="tile" [ngClass]="{'active' : active}">
-  <div class="tile-color" *ngFor="let c of color | shades : active" [ngStyle]="{
+  <app-slider *ngIf="active" [(ngModel)]="size" [min]='min' [max]='max'></app-slider>
+  <div class="tile-color" *ngFor="let c of color | shades : active : size" [ngStyle]="{
       'backgroundColor': c | rgbToHex,
       'color': c | contrastTextColor
     }" (click)="toggleActive()">
-      <h3>RGB: {{ c }}</h3>
-      <h3>Hex: {{ c | rgbToHex }}</h3>
       <h3>{{ c | rgbToName }}</h3>
+      <h4>RGB: {{ c }}</h4>
+      <h4>Hex: {{ c | rgbToHex }}</h4>
   </div>
 </section>

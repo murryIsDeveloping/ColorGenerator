@@ -1,22 +1,6 @@
 .palette {
   position: relative;
 
-  &__instructions {
-    position: absolute;
-    bottom: 50px;
-    left: 0;
-    right: 0;
-
-    h3 {
-      border-radius: 8px;
-      background-color: #ffffff;
-      padding: 20px 30px;
-      width: 450px;
-      margin: 0 auto;
-      box-shadow: 2px 3px 6px 2px rgba(0,0,0,0.5);
-    }
-  }
-
   app-number-dial {
     position: absolute;
     top: 20px;

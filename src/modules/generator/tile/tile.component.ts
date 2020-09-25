@@ -10,13 +10,15 @@ export class TileComponent implements OnInit {
   @Input('color') color: [number, number, number];
 
   active = false;
+  size = 5;
+  min = 1;
+  max = 10;
   constructor() { }
 
   ngOnInit(): void {
   }
 
   toggleActive(){
-    console.log('active', this.active)
     this.active = !this.active;
   }
 }

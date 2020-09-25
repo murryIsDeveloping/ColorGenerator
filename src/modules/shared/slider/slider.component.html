@@ -1,0 +1,4 @@
+<div class="track" #track (mouseover)="showTrack(true)" (mouseleave)="showTrack(false)"
+  [ngClass]="{ show: show, active: (active$ | async) }">
+  <div class="tracker" #tracker draggable="true" [ngStyle]="{ top: (drag$ | async) + 'px' }"></div>
+</div>
